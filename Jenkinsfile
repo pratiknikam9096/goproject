@@ -12,20 +12,12 @@ pipeline {
             }
         }
 
-        stage('Build') {
+        stage('Run Go Program') {
             steps {
                 bat '''
-                    set GOOS=windows
-                    set GOARCH=amd64
                     go version
-                    go build -o app.exe
+                    go run main.go
                 '''
-            }
-        }
-
-        stage('Run') {
-            steps {
-                bat 'app.exe'
             }
         }
     }

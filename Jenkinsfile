@@ -12,15 +12,14 @@ pipeline {
             }
         }
 
-        stage('Verify Go Installation') {
-            steps {
-                bat 'go version'
-            }
-        }
-
         stage('Build') {
             steps {
-                bat 'go build -o app.exe'
+                bat '''
+                    set GOOS=windows
+                    set GOARCH=amd64
+                    go version
+                    go build -o app.exe
+                '''
             }
         }
 

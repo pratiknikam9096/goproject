@@ -5,10 +5,6 @@ pipeline {
         GO111MODULE = 'on'
     }
 
-    tools {
-        go 'Go_1.19' // Make sure Go_1.19 (or your version) is installed in Jenkins Global Tool Configuration
-    }
-
     stages {
         stage('Checkout') {
             steps {
@@ -16,10 +12,25 @@ pipeline {
             }
         }
 
+        stage('Setup Go') {
+            steps {
+                sh '''
+                    if ! command -v go &> /dev/null
+                    then
+                        echo "Go not found! Please install Go on Jenkins agent."
+                        exit 1
+                    fi
+                    go version
+                '''
+            }
+        }
+
         stage('Build') {
             steps {
-                sh 'go mod init goproject || true' // Initialize module if not already done
-                sh 'go build -o app'
+                sh '''
+                    go mod init goproject || true
+                    go build -o app
+                '''
             }
         }
 

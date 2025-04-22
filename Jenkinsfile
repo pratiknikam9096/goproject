@@ -12,31 +12,21 @@ pipeline {
             }
         }
 
-        stage('Setup Go') {
+        stage('Verify Go Installation') {
             steps {
-                sh '''
-                    if ! command -v go &> /dev/null
-                    then
-                        echo "Go not found! Please install Go on Jenkins agent."
-                        exit 1
-                    fi
-                    go version
-                '''
+                bat 'go version'
             }
         }
 
         stage('Build') {
             steps {
-                sh '''
-                    go mod init goproject || true
-                    go build -o app
-                '''
+                bat 'go build -o app.exe'
             }
         }
 
         stage('Run') {
             steps {
-                sh './app'
+                bat 'app.exe'
             }
         }
     }
